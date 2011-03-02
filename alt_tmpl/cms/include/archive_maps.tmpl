@@ -5,6 +5,7 @@
     <thead>
         <tr>
             <th class="col head archive-type" style="width:20%;"><span class="col-label"><__trans phrase="Type"></span></th>
+            <th class="col head map-id" style="width:8%;"><span class="col-label"><__trans phrase="Map ID"></span></th>
             <th class="col head archive-path primary" style="width:50%;"><span class="col-label"><__trans phrase="Path"></span></th>
             <th class="col head publish-options" style="width:15%;"><span class="col-label"><__trans phrase="Publishing"></span></th>
             <th class="col head archive-delete si" style="width:4%;"><span><__trans phrase="Delete"></span></th>
@@ -18,6 +19,7 @@
                 <input type="checkbox" name="archive_tmpl_preferred_<mt:var name="archive_type" escape="html">_<mt:var name="map_id">" id="archive_tmpl_preferred_<mt:var name="archive_type" escape="html">_<mt:var name="map_id">"<mt:if name="map_is_preferred"> checked="checked"</mt:if> value="1" onchange="togglePreferred(this, '<mt:var name="map_id">')" /><input type="hidden" name="archive_tmpl_preferred_<mt:var name="archive_type" escape="html">_<mt:var name="map_id">" value="<mt:if name="map_is_preferred">1<mt:else>0</mt:if>" />
     </mt:if>
             </td> 
+            <td class="col map-id"><mt:var name="map_id"></td>
             <td class="col archive-path">
                 <select id="archive_file_sel_<mt:var name="map_id">" class="tmpl-path" name="archive_file_sel_<mt:var name="map_id">" onchange="archiveFileSelect(this)">
     <mt:loop name="archive_tmpl_loop">

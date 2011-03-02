@@ -72,6 +72,15 @@
 
 <mtapp:listing id="$table_id" hide_pager="1" class="show-all" listing_class="listing" type="template">
 <mt:if __first__>
+<style type="text/css">
+span.archive-type {
+  font-size: 80%;
+  color: #777;
+}
+span.archive-type.preferred {
+  color: #c77;
+}
+</style>
   <mt:setvarblock name="table_header">
     <tr>
       <th class="col head cb" style="width:4%;"><input type="checkbox" name="id-head" value="all" class="select" /></th>
@@ -129,7 +138,7 @@
         <mt:loop name="archive_types">
           <mt:loop name="archive_tmpl_loop">
             <mt:if name="selected">
-          <li><mt:var name="name" escape="html"><mt:var name="build_type" value="$map_build_type"></li>
+          <li><mt:var name="name" escape="html"><mt:var name="build_type" value="$map_build_type"><span class="archive-type<mt:if name="map_is_preferred"> preferred</mt:if>">&nbsp;&nbsp;(<mt:if name="map_is_preferred"><img src="<mt:var name="static_uri">images/status_icons/success.gif" alt="<__trans phrase="TemplateMap is Preferred">" width="9" height="9" /></mt:if><mt:var name="archive_label">[<mt:var name="map_id">])</span></li>
             </mt:if>
           </mt:loop>
         </mt:loop>
