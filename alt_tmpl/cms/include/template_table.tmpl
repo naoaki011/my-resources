@@ -74,33 +74,34 @@
 <mt:if __first__>
   <mt:setvarblock name="table_header">
     <tr>
-      <th class="col head cb"><input type="checkbox" name="id-head" value="all" class="select" /></th>
-      <th class="col head template-name primary"><span class="col-label"><__trans phrase="Template Name"></span></th>
+      <th class="col head cb" style="width:4%;"><input type="checkbox" name="id-head" value="all" class="select" /></th>
+      <th class="col head template-name primary" style="width:25%;"><span class="col-label"><__trans phrase="Template Name"></span></th>
     <mt:if name="template_type" eq="index">
       <th class="col head output-file primary"><span class="col-label"><__trans phrase="Output File"></span></th>
     </mt:if>
     <mt:if name="template_type" eq="archive">
       <th class="col head output-file primary"><span class="col-label"><__trans phrase="Archive Path"></span></th>
     </mt:if>
+      <th class="col head ident primary" style="width:20%;"><span class="col-label"><__trans phrase="Identifier"></span></th>
     <mt:unless name="blog_view">
       <mt:if name="scope_type" ne="blog">
-      <th class="col head blog primary"><span class="col-label"><__trans phrase="Website/Blog"></span></th>
+      <th class="col head blog primary" style="width:20%;"><span class="col-label"><__trans phrase="Website/Blog"></span></th>
       </mt:if>
     </mt:unless>
     <mt:if name="template_type" like="/(index|archive)/">
-      <th class="col head publishing-method"><span class="col-label"><__trans phrase="Publish"></span></th>
+      <th class="col head publishing-method" style="width:15%;"><span class="col-label"><__trans phrase="Publish"></span></th>
     </mt:if>
     <mt:if name="template_type" like="(module|widget)">
       <mt:if name="blog_id">
-      <th class="col head ssi-method"><span class="col-label"><__trans phrase="SSI"></span></th>
-      <th class="col head cache-method"><span class="col-label"><__trans phrase="Cached"></span></th>
+      <th class="col head ssi-method" style="width:4%;"><span class="col-label"><__trans phrase="SSI"></span></th>
+      <th class="col head cache-method" style="width:4%;"><span class="col-label"><__trans phrase="Cached"></span></th>
       </mt:if>
     </mt:if>
     <mt:unless name="screen_id" eq="search-replace">
-      <th class="col head linked-template si"><span class="col-label"><img src="<mt:var name="static_uri">images/status_icons/linked.gif" alt="<__trans phrase="Linked Template">" title="<__trans phrase="Linked Template">" /></span></th>
+      <th class="col head linked-template si" style="width:4%;"><span class="col-label"><img src="<mt:var name="static_uri">images/status_icons/linked.gif" alt="<__trans phrase="Linked Template">" title="<__trans phrase="Linked Template">" /></span></th>
     </mt:unless>
     <mt:unless name="blog_view">
-      <th class="col head view"><span class="col-label"><__trans phrase="View"></span></th>
+      <th class="col head view" style="width:4%;"><span class="col-label"><__trans phrase="View"></span></th>
     </mt:unless>
     </tr>
   </mt:setvarblock>
@@ -138,6 +139,7 @@
       </mt:if>
       </td>
     </mt:if>
+      <td class="col ident"><$mt:var name="identifier" escape="html"$></td>
     <mt:unless name="blog_view">
       <mt:if name="scope_type" ne="blog">
       <td class="col blog"><a href="<$mt:var name="script_url"$>?__mode=list_template&amp;blog_id=<$mt:var name="blog_id"$>"><$mt:var name="weblog_name" escape="html"$></a></td>
