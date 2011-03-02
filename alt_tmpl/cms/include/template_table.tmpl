@@ -56,6 +56,15 @@
 <mt:setvarblock name="table_id"><mt:var name="template_type" default="template" escape="html">-listing</mt:setvarblock>
 <mtapp:listing id="$table_id" hide_pager="1" class="show-all" listing_class="show-actions-bar" type="template">
     <mt:if __first__>
+<style type="text/css">
+span.archive-type {
+  font-size: 80%;
+  color: #777;
+}
+span.archive-type.preferred {
+  color: #c77;
+}
+</style>
         <mt:setvarblock name="table_header">
             <tr>
                 <th class="cb"><input type="checkbox" name="id-head" value="all" class="select" /></th>
@@ -66,6 +75,7 @@
         <mt:if name="template_type" eq="archive">
                 <th class="output-file"><__trans phrase="Archive Path"></th>
         </mt:if>
+                <th class="ident"><__trans phrase="Identifier"></th>
         <mt:unless name="blog_view">
             <mt:if name="scope_type" ne="blog">
                 <th class="blog primary-col"><__trans phrase="Website/Blog"></th>
@@ -107,7 +117,7 @@
                     <ul>
             <mt:loop name="archive_types">
                 <mt:loop name="archive_tmpl_loop">
-                        <mt:if name="selected"><li><mt:var name="name" escape="html"><mt:var name="build_type" value="$map_build_type"></li></mt:if>
+                        <mt:if name="selected"><li><mt:var name="name" escape="html"><mt:var name="build_type" value="$map_build_type"><span class="archive-type<mt:if name="map_is_preferred"> preferred</mt:if>">&nbsp;&nbsp;(<mt:if name="map_is_preferred"><img src="<mt:var name="static_uri">images/status_icons/success.gif" alt="<__trans phrase="TemplateMap is Preferred">" width="9" height="9" /></mt:if><mt:var name="archive_label">[<mt:var name="map_id">])</span></li></mt:if>
                 </mt:loop>
             </mt:loop>
                     </ul>
@@ -116,6 +126,7 @@
         </mt:if>
                 </td>
     </mt:if>
+                <td class="ident"><$mt:var name="identifier" escape="html"$></td>
         <mt:unless name="blog_view">
             <mt:if name="scope_type" ne="blog">
                 <td class="blog"><a href="<$mt:var name="script_url"$>?__mode=list_template&amp;blog_id=<$mt:var name="blog_id"$>"><$mt:var name="weblog_name" escape="html"$></a></td>

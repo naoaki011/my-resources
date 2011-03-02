@@ -566,6 +566,13 @@ function toggleCache(id) {
     </mtapp:setting>
 </mt:if>
 
+      <mtapp:setting
+        id="identifier"
+        label="<__trans phrase="Identifier">"
+        label_class="top_label">
+        <input type="text" name="identifier" id="identifier" value="<mt:var name="identifier" escape="html">" class="mt-edit-field" />
+      </mtapp:setting>
+
 <mt:if name="type" eq="index">
     <mtapp:setting
         label="<__trans phrase="Template Type">"
