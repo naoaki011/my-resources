@@ -97,7 +97,7 @@
   <mtapp:statusmsg
      id="saved-rebuild"
      class="success">
-    <__trans phrase="Your [_1] has been published." params="<mt:var name="name" escape="html">">
+    <__trans phrase="Your [_1] has been published." params="<mt:var name="name" escape="html" escape="html">">
   </mtapp:statusmsg>
 </mt:if>
 </mt:setvarblock>
@@ -114,7 +114,7 @@
     <div class="revision-info">
     <mt:if name="rev_date">
       <p><__trans phrase="Revision: <strong>[_1]</strong>" params="<mt:var name="rev_date" escape="html">"></p>
-      <a href="<mt:var name="script_url">?__mode=list_revision&_type=<mt:var name="object_type" default="entry">&id=<$mt:var name="id"$>&blog_id=<$mt:var name="blog_id"$>&r=<mt:var name="rev_number" escape="html">" class="mt-open-dialog" title="<__trans phrase="View revisions of this template">"><__trans phrase="View revisions"></a>
+      <a href="<mt:var name="script_url">?__mode=list_revision&_type=<mt:var name="object_type" default="entry">&id=<$mt:var name="id" escape="html"$>&blog_id=<$mt:var name="blog_id"$>&r=<mt:var name="rev_number" escape="html">" class="mt-open-dialog" title="<__trans phrase="View revisions of this template">"><__trans phrase="View revisions"></a>
     <mt:else>
       <p class="zero-state"><__trans phrase="No revision(s) associated with this template"></p>
     </mt:if>
@@ -142,6 +142,9 @@
     <li><a href="<mt:var name="script_url">?__mode=cfg_prefs&amp;blog_id=<mt:var name="blog_id">#module-option-settings" class="icon-left icon-related"><__trans phrase="Module Option Settings"></a></li>
     </mt:if>
   <mt:else>
+    <mt:unless name="type" eq="backup">
+    <li><a href="<mt:var name="script_url">?__mode=list_template&amp;blog_id=<mt:var name="blog_id">#<$mt:var name="template_group"$>" class="icon-left icon-related"><__trans phrase="List [_1] templates" params="<$mt:var name="template_group_trans"$>"></a></li>
+    </mt:unless>
     <li><a href="<mt:var name="script_url">?__mode=list_template&amp;blog_id=<mt:var name="blog_id">" class="icon-left icon-related"><__trans phrase="List all templates"></a></li>
   </mt:if>
   <mt:if name="published_url">
@@ -591,13 +594,15 @@ function toggleCache(id) {
 
   <div id="template-options"<mt:if name="template_options_active"> class="active"</mt:if>>
     <div id="template-options-header" class="line">
-      <div class="unit size3of5">
-        <h3><a href="javascript:void(0);" class="icon-left-wide" onclick="return toggleActive('template-options');"><__trans phrase="Template Options"></a></h3>
+      <div class="template-options-toggle">
+        <a href="javascript:void(0);" class="icon-left icon-spinner" onclick="return toggleActive('template-options');"><__trans phrase="Template Options"></a>
       </div>
-      <div class="template-options-summary unit size2of5">
-      <mt:if name="has_outfile">
+      <div class="template-options-summary">
+      <mt:unless name="new_object">
+        <mt:if name="has_outfile">
         <__trans phrase="Output file: <strong>[_1]</strong>" params="<mt:var name="outfile" escape="html" escape="html">">
-      </mt:if>
+        </mt:if>
+      </mt:unless>
       <mt:if name="enabled_archive_types">
         <__trans phrase="Enabled Mappings: [_1]" params="<mt:var name="enabled_archive_types">">
       </mt:if>
@@ -608,7 +613,7 @@ function toggleCache(id) {
       <mtapp:setting
          id="outfile"
          label="<__trans phrase="Output File">"
-         label_class="top_label"
+         label_class="top-label"
          help_page="templates"
          help_section="output_file">
         <input type="text" name="outfile" id="outfile" class="text" tabindex="4" value="<mt:var name="outfile" escape="html">" mt:watch-change="1" />
@@ -625,7 +630,7 @@ function toggleCache(id) {
     <mt:if name="type" eq="index">
       <mtapp:setting
          label="<__trans phrase="Template Type">"
-         label_class="top_label"
+         label_class="top-label"
          id="identifier"
          help_page="templates"
          help_section="template_type">
@@ -641,7 +646,7 @@ function toggleCache(id) {
       <mtapp:setting
          id="linked_file"
          label="<__trans phrase="Link to File">"
-         label_class="top_label"
+         label_class="top-label"
          help_page="templates"
          help_section="linked_templates">
         <input type="text" name="linked_file" id="linked_file" class="text" tabindex="8" value="<mt:var name="linked_file" escape="html">" maxlength="255" mt:watch-change="1" />
@@ -653,7 +658,7 @@ function toggleCache(id) {
     <mtapp:setting
        id="archive_mapping"
        label="<__trans phrase="Archive Mapping">"
-       label_class="top_label"
+       label_class="top-label"
        content_class="field-content-text"
        show_hint="0">
       <p><a href="javascript:void(0)" onclick="return setCreateMode()" class="icon-left icon-create"><__trans phrase="Create Archive Mapping"></a></p>
@@ -687,7 +692,7 @@ function toggleCache(id) {
     <mtapp:setting
        id="build_dynamic"
        label="<__trans phrase="Publishing">"
-       label_class="top_label"
+       label_class="top-label"
        hint="$publishing_hint"
        show_hint="1"
        help_page="templates"
@@ -698,16 +703,16 @@ function toggleCache(id) {
         <option value="4"<mt:if name="build_type_4"> selected="selected"</mt:if>><__trans phrase="Via Publish Queue"></option>
 <mt:ignore>
 <!-- untested features -->
-        <option value="5"<mt:if name="build_type_5"> selected="selected"</mt:if>><__trans phrase="On a schedule"></option>
-            <!-- This code needs to be shown if the "On a schedule" has been selected -->
-        <__trans phrase=": every "><input name="schedule_interval" id="schedule_interval" value="<mt:var name="schedule_interval" escape="html">" maxlength="10" class="quarter-width" mt:watch-change="1" />
-        <select name="schedule_period" id="schedule_period">
-            <option value="minutes"<mt:if name="schedule_period_minutes"> selected="selected"</mt:if>><__trans phrase="minutes"></option>
-            <option value="hours"<mt:if name="schedule_period_hours"> selected="selected"</mt:if>><__trans phrase="hours"></option>
-            <option value="days"<mt:if name="schedule_period_days"> selected="selected"</mt:if>><__trans phrase="days"></option>
-        </select>
+  <option value="5"<mt:if name="build_type_5"> selected="selected"</mt:if>><__trans phrase="On a schedule"></option>
+  <!-- This code needs to be shown if the "On a schedule" has been selected -->
+  <__trans phrase=": every "><input name="schedule_interval" id="schedule_interval" value="<mt:var name="schedule_interval" escape="html">" maxlength="10" class="quarter-width" mt:watch-change="1" />
+    <select name="schedule_period" id="schedule_period">
+      <option value="minutes"<mt:if name="schedule_period_minutes"> selected="selected"</mt:if>><__trans phrase="minutes"></option>
+      <option value="hours"<mt:if name="schedule_period_hours"> selected="selected"</mt:if>><__trans phrase="hours"></option>
+      <option value="days"<mt:if name="schedule_period_days"> selected="selected"</mt:if>><__trans phrase="days"></option>
+    </select>
 </mt:ignore>
-        </mt:if>
+      </mt:if>
         <option value="3"<mt:if name="build_type_3"> selected="selected"</mt:if>><__trans phrase="Dynamically"></option>
         <option value="2"<mt:if name="build_type_2"> selected="selected"</mt:if>><__trans phrase="Manually"></option>
         <option value="0"<mt:if name="build_type_0"> selected="selected"</mt:if>><__trans phrase="Do Not Publish"></option>
@@ -720,7 +725,7 @@ function toggleCache(id) {
     <mtapp:setting
        id="server_side_include"
        label="<__trans phrase="Server Side Include">"
-       label_class="top_label">
+       label_class="top-label">
       <input type="checkbox" id="server-side-include" name="include_with_ssi" value="1" onclick="toggleHidden('include_cache_path-field')"<mt:if name="include_with_ssi"> checked</mt:if> />
       <label for="server-side-include"><__trans phrase="Process as <strong>[_1]</strong> include" params="<$mt:var name="ssi_type"$>"></label>
     </mtapp:setting>
@@ -728,7 +733,7 @@ function toggleCache(id) {
     <mtapp:setting
        id="include_cache_path"
        label="<__trans phrase="Include cache path">"
-       label_class="top_label"
+       label_class="top-label"
        shown="<mt:if name="include_with_ssi">0<mt:else>1</mt:if>">
       <div class="textarea-wrapper">
         <input type="text" id="include-cache-path" name="cache_path" value="<mt:var name="cache_path" escape="html">" maxlength="255" class="full-width" mt:watch-change="1" />
@@ -740,7 +745,7 @@ function toggleCache(id) {
     <mtapp:setting
        id="caching"
        label="<__trans phrase="Module Caching">"
-       label_class="top_label">
+       label_class="top-label">
     <mt:if name="caching_disabled">
       <__trans phrase="Disabled (<a href="[_1]">change publishing settings</a>)" params="<mt:var name="script_url">?__mode=cfg_prefs&amp;blog_id=<mt:var name="blog_id">">
     <mt:else>
@@ -801,7 +806,17 @@ function toggleCache(id) {
   <input type="hidden" name="magic_token" value="<mt:var name="magic_token">" />
 </form>
 
-<script type="text/javascript" src="<$mt:var name="static_uri"$>codemirror/js/codemirror.js?v=<mt:var name="mt_version_id" escape="URL">"></script>
+<script type="text/javascript" src="<$mt:var name="static_uri"$>codemirror/lib/codemirror.js?v=<mt:var name="mt_version_id" escape="URL">"></script>
+<link rel="stylesheet" href="<$mt:var name="static_uri"$>codemirror/lib/codemirror.css">
+<link rel="stylesheet" href="<$mt:var name="static_uri"$>codemirror/theme/default.css">
+
+<script type="text/javascript" src="<$mt:var name="static_uri"$>codemirror/mt/xml.js?v=<mt:var name="mt_version_id" escape="URL">"></script>
+<script type="text/javascript" src="<$mt:var name="static_uri"$>codemirror/mt/javascript.js?v=<mt:var name="mt_version_id" escape="URL">"></script>
+<script type="text/javascript" src="<$mt:var name="static_uri"$>codemirror/mt/css.js?v=<mt:var name="mt_version_id" escape="URL">"></script>
+<script type="text/javascript" src="<$mt:var name="static_uri"$>codemirror/mt/htmlmixed.js?v=<mt:var name="mt_version_id" escape="URL">"></script>
+<link rel="stylesheet" href="<$mt:var name="static_uri"$>codemirror/mt/mt.css">
+
+
 <script type="text/javascript">
 /* <![CDATA[ */
 App.singletonConstructor =
@@ -820,36 +835,47 @@ MT.App = new Class( MT.App, {
 } );
 
 var options = jQuery('#text').attr('mt:editor-options');
-var parsers;
-if (options.match('lang:css')) {
-    parsers = ["parsecss.js"];
-} else if (options.match('lang:javascript')) {
-    parsers = ["tokenizejavascript.js", "parsejavascript.js"];
-} else {
-    parsers = ["parsexml.js", "parsecss.js", "tokenizejavascript.js", "parsejavascript.js", "parsehtmlmixed.js"];
-}
-
-var editor = CodeMirror.fromTextArea('text', {
-    parserfile: parsers,
-    stylesheet: ["<$mt:var name="static_uri"$>codemirror/css/xmlcolors.css", "<$mt:var name="static_uri"$>codemirror/css/jscolors.css", "<$mt:var name="static_uri"$>codemirror/css/csscolors.css"],
-    path: "<mt:var name="static_uri">codemirror/js/",
+var editor_params = {
     lineNumbers: true,
-    textWrapping: false,
+    lineWrapping: false,
     tabMode: "default",
     indentUnit: 0,
-    passDelay: 20,
-    height: "550px",
-    lang: "<mt:var name="language_tag">"
-});
+    pollForIME: true,
+    mode: "text/html"
+};
+if (options.match('lang:css')) {
+    editor_params['mode'] = 'text/javascript';
+} else if (options.match('lang:javascript')) {
+    editor_params['mode'] = 'text/css';
+}
+
+var editor = CodeMirror.fromTextArea(jQuery('#text').get(0), editor_params);
 
 function syncEditor() {
-    var wrapper = editor.wrapping;
+    var wrapper = editor.getWrapperElement();
     if ( jQuery(wrapper).css('display') == 'none') {
-        editor.setCode(jQuery('#text').val());
+        editor.setValue(jQuery('#text').val());
     } else {
-        jQuery('#text').val(editor.getCode());
+        jQuery('#text').val(editor.getValue());
     }
 }
+
+function saveTemplatePrefs( sync ) {
+  jQuery.ajax({
+    type: 'POST',
+    contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+    async: false,
+    url: '<mt:var name="script_url">',
+    dataType: 'json',
+    data: {
+      __mode: 'save_template_prefs',
+      blog_id: <mt:if name="blog_id"><mt:var name="blog_id"><mt:else>0</mt:if>,
+      syntax_highlight: sync,
+      magic_token: '<mt:var name="magic_token">'
+    }
+  });
+}
+
 /* ]]> */
 </script>
 <mt:setvarblock name="jq_js_include" append="1">
@@ -870,20 +896,26 @@ function syncEditor() {
     });
     jQuery('#syntaxon, #syntaxoff').click(function() {
         syncEditor();
-        var wrapper = editor.wrapping;
+        var wrapper = editor.getWrapperElement();
         jQuery('#syntaxon, #syntaxoff').removeClass('active');
         var id = jQuery(this).addClass('active').attr('id');
+        var syntax;
         if (id == 'syntaxon') {
             jQuery('#text').hide();
             jQuery(wrapper).show();
+            syntax = 'on';
         } else {
             jQuery('#text').show();
             jQuery(wrapper).hide();
+            syntax = 'off';
         }
+        saveTemplatePrefs( syntax );
         return false;
     });
+    jQuery('#syntax<mt:var name="disp_prefs_syntax" default="on">').click();
     jQuery(window).bind('pre_autosave', function(){
         syncEditor();
     });
+
 </mt:setvarblock>
 <mt:include name="include/footer.tmpl">
