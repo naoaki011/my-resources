@@ -1,0 +1,11 @@
+id: EditIdentifier
+key: EditIdentifier
+name: <__trans phrase="Edit Identifier">
+version: 0.1
+description: <__trans phrase="EditIdentifier can edit template identifier.">
+author_name: Alfasado Inc.
+author_link: http://alfasado.net/
+l10n_class: EditIdentifier::L10N
+
+callbacks:
+ MT::App::CMS::template_param.edit_template: $EditIdentifier::EditIdentifier::Plugin::_edit_template_param
