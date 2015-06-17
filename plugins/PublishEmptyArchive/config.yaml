@@ -1,0 +1,16 @@
+name: PublishEmptyArchive
+id: PublishEmptyArchive
+key: publishemptyarchive
+description: <__trans phrase="Publish empty archive.">
+author_name: Alfasado,Inc.
+author_link: http://alfasado.net/
+version: 0.1
+schema_version: 0.1
+l10n_class: PublishEmptyArchive::L10N
+object_types:
+    blog:
+        publish_empty_archive: boolean meta
+callbacks:
+    MT::App::CMS::template_param.cfg_prefs: $publishemptyarchive::PublishEmptyArchive::Plugin::_cb_tp_cfg_prefs
+    cms_pre_save.blog: $publishemptyarchive::PublishEmptyArchive::Plugin::_cb_cms_pre_save_blog
+init: $publishemptyarchive::PublishEmptyArchive::Patch::init
